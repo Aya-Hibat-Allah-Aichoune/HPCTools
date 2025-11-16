@@ -1,17 +1,20 @@
-# Default Lapacke: Openblas at CESGA
-LDLIBS=-lopenblas
+CC = gcc
+CFLAGS = -I/mingw64/include
+LDFLAGS = -L/mingw64/lib -lopenblas
 
-# Other systems (my Debian boxes, for example)
-#LDLIBS=-llapacke
+all: solve
 
-# Intel MKL at CESGA
-# Module needed: imkl
-# => module load openblas
-# LDLIBS for intel compiler: icx (module needed: intel)
-# Just invoke make like this: make CC=icx
-#LDLIBS=-qmkl=sequential -lmkl_intel_lp64
+solve: main.o dgesv.o timer.o
+	$(CC) -o solve main.o dgesv.o timer.o $(LDFLAGS)
 
-dgesv: dgesv.o timer.o main.o
+main.o: main.c
+	$(CC) $(CFLAGS) -c main.c
+
+dgesv.o: dgesv.c dgesv.h
+	$(CC) $(CFLAGS) -c dgesv.c
+
+timer.o: timer.c timer.h
+	$(CC) $(CFLAGS) -c timer.c
 
 clean:
-	$(RM) dgesv *.o *~
+	rm -f *.o solve
