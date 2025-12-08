@@ -1,0 +1,5 @@
+ICX Benchmark Results
+---------------------
+Size 1024: O2=181ms,   O3=182ms,   Ofast=182ms,   Ofast+IPO=180ms
+Size 2048: O2=1638ms,  O3=1638ms,  Ofast=1626ms,  Ofast+IPO=1628ms
+Size 4096: O2=17874ms, O3=17920ms, Ofast=18177ms, Ofast+IPO=18148ms
