@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+// Task 2
 int my_dgesv(int n, int nrhs, double * restrict a, double * restrict b)
 {
     int i, j, k, max_row;
@@ -9,11 +10,13 @@ int my_dgesv(int n, int nrhs, double * restrict a, double * restrict b)
 
     for (k = 0; k < n; k++) {
         
+        
         max_row = k;
         for (i = k+1; i < n; i++)
             if (fabs(a[i*n + k]) > fabs(a[max_row*n + k]))
                 max_row = i;
 
+       
         if (max_row != k) {
             for (j = 0; j < n; j++) {
                 tmp = a[k*n + j];
@@ -27,14 +30,16 @@ int my_dgesv(int n, int nrhs, double * restrict a, double * restrict b)
             }
         }
 
-        double *row_k = &a[k*n];
+        
+        double *row_k = &a[k*n]; 
 
         for (i = k+1; i < n; i++) {
             double factor = a[i*n + k] / row_k[k];
-            double *row_i = &a[i*n];
+            double *row_i = &a[i*n]; 
 
-            row_i[k] = 0.0;
+            row_i[k] = 0.0; 
 
+            // Force vectorization
             #pragma GCC ivdep 
             for (j = k+1; j < n; j++) {
                 row_i[j] -= factor * row_k[j];
@@ -49,6 +54,7 @@ int my_dgesv(int n, int nrhs, double * restrict a, double * restrict b)
         }
     }
 
+   
     for (j = 0; j < nrhs; j++) {
         for (i = n-1; i >= 0; i--) {
             tmp = b[i*nrhs + j];
@@ -57,6 +63,5 @@ int my_dgesv(int n, int nrhs, double * restrict a, double * restrict b)
             b[i*nrhs + j] = tmp / a[i*n + i];
         }
     }
-
     return 0;
 }
